@@ -27,9 +27,22 @@ variable "port" {
   default = 8000
 }
 
+variable "namespace" {
+  type = string
+}
+
+# Create namespace
+resource "kubernetes_namespace_v1" "env" {
+  metadata {
+    name = var.namespace
+  }
+}
+
+# Create Deployment
 resource "kubernetes_deployment_v1" "hello" {
   metadata {
-    name = "hello-app"
+    name      = "hello-app"
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
   }
 
   spec {
@@ -62,9 +75,11 @@ resource "kubernetes_deployment_v1" "hello" {
   }
 }
 
+# Create Service
 resource "kubernetes_service_v1" "hello" {
   metadata {
-    name = "hello-app"
+    name      = "hello-app"
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
   }
 
   spec {
@@ -81,7 +96,7 @@ resource "kubernetes_service_v1" "hello" {
   }
 }
 
+# Output application URL
 output "url" {
   value = "http://localhost:${var.port}"
 }
-
