@@ -54,13 +54,27 @@ prod          hello-app    NodePort    10.96.36.192   <none>        8090:31183/T
 ## Break it: the error after deleting `terraform.tfstate`
 
 ```
+Error: Terraform lost track of the existing Kubernetes resources
+because the terraform.tfstate file was deleted.
 
+When running terraform plan or terraform apply again,
+Terraform may try to recreate resources that already exist,
+resulting in resource already exists errors.
 ```
 
 ## Break it: the wrong selector
 
 What did you see, and how did you find the cause? One or two sentences.
 
+```
+The application was not accessible because the Kubernetes Service
+selector did not match the labels on the Deployment Pods.
+
+I used kubectl get pods --show-labels and kubectl describe svc
+hello-app -n dev to investigate the issue. I found that the
+Service selector did not match the Pod labels. After correcting
+the selector, the Service successfully connected to the Pods.
+```
 
 
 ## Screenshot
