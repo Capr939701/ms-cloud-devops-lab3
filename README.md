@@ -28,13 +28,17 @@ http://localhost:8080
 Paste the lines that show the image change, and the `Plan:` line.
 
 ```
+~ image = "shripada/hello-app:v1" -> "shripada/hello-app:v2"
 
+Plan: 0 to add, 1 to change, 0 to destroy.
 ```
 
 ## Part 3: plan that found the drift after `kubectl scale`
 
 ```
+~ replicas = "5" -> "3"
 
+Plan: 0 to add, 1 to change, 0 to destroy.
 ```
 
 ## Part 4: `kubectl get svc -A` showing dev and prod
